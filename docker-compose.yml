@@ -1,0 +1,17 @@
+version: '3'
+
+services: 
+  api-solid-pg:
+    image: bitnami/postgresql
+    ports:
+      - 5432:5432
+    environment: 
+      - POSTGRESQL_USERNAME=docker
+      - POSTGRESQL_PASSWORD=docker
+      - POSTGRESQL_DATABASE=postgresql
+
+# docker compose up => iniciar o container
+# docker compose down => apagar o container
+# docker compose stop => parar o container sem apagar os dados
+# docker ps => visualizar os containers 
+# npx prisma migrate dev => criar as tabelas do prisma, verificar se existe algum processo em aberto
