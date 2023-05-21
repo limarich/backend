@@ -1,7 +1,5 @@
 import { z } from "zod";
-import { prisma } from "../../lib/prisma";
 import { FastifyReply, FastifyRequest } from "fastify";
-import { hash } from "bcrypt";
 import { RegisterUseCase } from "../../use-cases/register";
 import { PrismaUsersRepository } from "../../prisma/prisma-users-repository";
 
