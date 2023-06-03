@@ -3,7 +3,7 @@ import { describe, it, expect} from 'vitest';
 import { RegisterUseCase } from './register';
 import { compare } from 'bcrypt';
 import { InMemoryUsersRepository } from '../repositories/in-memory/in-memory-users-repository';
-import { UserAlreadyExistsError } from './erros/user-already-exists-error';
+import { UserAlreadyExistsError } from './errors/user-already-exists-error';
 
 
 describe('Register use case', () => {
@@ -16,7 +16,9 @@ describe('Register use case', () => {
         const {user} = await registerUseCase.execute({
             name: 'Rich',
             email: 'envkt@example.com',
-            password: '123456'
+            password: '123456',
+            isAdmin: false,
+            phone: '(22) 98180-5474'
         })
 
         expect(user.id).toEqual(expect.any(String));
@@ -30,7 +32,9 @@ describe('Register use case', () => {
         const {user} = await registerUseCase.execute({
             name: 'Rich',
             email: 'envkt@example.com',
-            password: '123456'
+            password: '123456',
+            isAdmin: false,
+            phone: '(22) 98180-5474'
         })
 
         const isPasswordCorrectlyHashed = await compare(
@@ -49,15 +53,19 @@ describe('Register use case', () => {
 
         await registerUseCase.execute({
             name: 'Rich',
-            email,
-            password: '123456'
+            email: 'envkt@example.com',
+            password: '123456',
+            isAdmin: false,
+            phone: '(22) 98180-5474'
         })
 
         await expect(() => {
             return registerUseCase.execute({
                 name: 'Rich',
-                email,
-                password: '123456'
+                email: 'envkt@example.com',
+                password: '123456',
+                isAdmin: false,
+                phone: '(22) 98180-5474'
             });
         }).rejects.toBeInstanceOf(UserAlreadyExistsError);
     })
