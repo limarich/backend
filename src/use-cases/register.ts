@@ -6,6 +6,8 @@ interface RegisterUseCaseRequest {
     name: string;
     email: string;
     password: string;
+    phone: string; 
+    isAdmin: boolean;
 }
 
 
@@ -13,7 +15,7 @@ export class RegisterUseCase {
 
     constructor(private usersRepository: UsersRepository){}
 
-     async execute({email,name,password}:RegisterUseCaseRequest) {
+     async execute({email,name,password, phone, isAdmin}:RegisterUseCaseRequest) {
         const password_hash =  await hash(password, 6);
     
         const userWithSameEmail = await this.usersRepository.findByEmail(email);
@@ -24,7 +26,7 @@ export class RegisterUseCase {
     
     
        const user =  await this.usersRepository.create({
-            name, email, password_hash
+            name, email, password_hash, phone, isAdmin
         })
 
         return {

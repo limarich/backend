@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,11 +8,106 @@ datasource db {
 }
 
 model User {
-  id            String   @id @default(uuid())
+  id            String     @id @default(uuid())
   name          String
-  email         String   @unique
+  email         String     @unique
   password_hash String
-  created_at    DateTime @default(now())
+  phone         String
+  isAdmin       Boolean
+  address       Address?
+  businesses    Business[]
+
+  created_at DateTime @default(now())
 
   @@map("user")
+}
+
+model Address {
+  id           String @id @default(uuid())
+  country      String
+  city         String
+  neighborhood String
+  street       String
+  number       String
+  zipCode      String
+
+  userId   String     @unique
+  user     User       @relation(fields: [userId], references: [id])
+  Business Business[]
+
+  @@map("address")
+}
+
+model Business {
+  id      String   @id @default(uuid())
+  name    String
+  address Address? @relation(fields: [addressId], references: [id])
+  phone   String
+  website String?
+
+  userId    String  @unique
+  user      User    @relation(fields: [userId], references: [id])
+  addressId String?
+
+  businessModel BusinessModel?
+  actionPlan    ActionPlan?
+  swot          Swot?
+
+  @@map("business")
+}
+
+model BusinessModel {
+  id                   String @id @default(uuid())
+  mainPartnerships     String
+  mainActivities       String
+  mainResources        String
+  valueProposition     String
+  customerRelationship String
+  channels             String
+  customerSegments     String
+  costs                String
+  revenue              String
+
+  businessId String   @unique
+  business   Business @relation(fields: [businessId], references: [id])
+
+  @@map("business_model")
+}
+
+model ActionPlan {
+  id         String       @id @default(uuid())
+  items      ActionItem[]
+  businessId String       @unique
+  business   Business     @relation(fields: [businessId], references: [id])
+
+  @@map("action_plan")
+}
+
+model ActionItem {
+  id      Int    @id @default(autoincrement())
+  what    String
+  why     String
+  who     String
+  when    String
+  where   String
+  how     String
+  howMuch String
+
+  actionPlanId String     @unique
+  actionPlan   ActionPlan @relation(fields: [actionPlanId], references: [id])
+
+  @@map("action_item")
+}
+
+model Swot {
+  id            String @id @default(uuid())
+  strengths     String
+  weaknesses    String
+  opportunities String
+  threats       String
+
+  businessId String   @unique
+  business   Business @relation(fields: [businessId], references: [id])
+
+  @@map("swot")
 }
