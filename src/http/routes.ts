@@ -4,6 +4,7 @@ import { update } from "./controllers/update";
 import { authenticate } from "./controllers/authenticate";
 import { getUser } from "./controllers/getUser";
 import { RegisterBusiness } from "./controllers/registerBusiness";
+import { RegisterSwot } from "./controllers/registerSwot";
 
 export async function appRoutes(app: FastifyInstance) {
     // user routes
@@ -13,4 +14,6 @@ export async function appRoutes(app: FastifyInstance) {
     app.get('/user', getUser);
     // business routes
     app.post('/business', RegisterBusiness);
+    // swot routes
+    app.post('/swot',RegisterSwot);
 }

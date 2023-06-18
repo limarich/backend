@@ -21,6 +21,11 @@ interface ConnectInput {
 
 
 export class InMemoryBusinessRepository implements BusinessRepository {
+    async findById(id: string) {
+      const business = this.businesses.find(business => business.id === id) || null;
+
+      return business;
+    }
 
     public businesses: Business[] = [];
     
