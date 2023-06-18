@@ -100,11 +100,11 @@ model ActionItem {
 }
 
 model Swot {
-  id            String @id @default(uuid())
-  strengths     String
-  weaknesses    String
-  opportunities String
-  threats       String
+  id            String   @id @default(uuid())
+  strengths     String[]
+  weaknesses    String[]
+  opportunities String[]
+  threats       String[]
 
   businessId String   @unique
   business   Business @relation(fields: [businessId], references: [id])
