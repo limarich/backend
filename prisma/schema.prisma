@@ -57,16 +57,16 @@ model Business {
 }
 
 model BusinessModel {
-  id                   String @id @default(uuid())
-  mainPartnerships     String
-  mainActivities       String
-  mainResources        String
-  valueProposition     String
-  customerRelationship String
-  channels             String
-  customerSegments     String
-  costs                String
-  revenue              String
+  id                   String   @id @default(uuid())
+  mainPartnerships     String[]
+  mainActivities       String[]
+  mainResources        String[]
+  valueProposition     String[]
+  customerRelationship String[]
+  channels             String[]
+  customerSegments     String[]
+  costs                String[]
+  revenue              String[]
 
   businessId String   @unique
   business   Business @relation(fields: [businessId], references: [id])
