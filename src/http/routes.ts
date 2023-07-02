@@ -1,5 +1,5 @@
 import { FastifyInstance } from "fastify";
-import { register } from "./controllers/register";
+import { registerUser } from "./controllers/registerUser";
 import { update } from "./controllers/update";
 import { authenticate } from "./controllers/authenticate";
 import { getUser } from "./controllers/getUser";
@@ -9,7 +9,7 @@ import { RegisterBusinessModel } from "./controllers/registerBusinessModel";
 
 export async function appRoutes(app: FastifyInstance) {
     // user routes
-    app.post('/users', register);
+    app.post('/users', registerUser);
     app.post('/sections', authenticate);
     app.put('/user/update', update);
     app.get('/user', getUser);
