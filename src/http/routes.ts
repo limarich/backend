@@ -7,6 +7,7 @@ import { RegisterBusiness } from "./controllers/registerBusiness";
 import { RegisterSwot } from "./controllers/registerSwot";
 import { RegisterBusinessModel } from "./controllers/registerBusinessModel";
 import { getBusiness } from "./controllers/getBusiness";
+import { updateBusiness } from "./controllers/updateBusiness";
 
 export async function appRoutes(app: FastifyInstance) {
     // user routes
@@ -17,6 +18,7 @@ export async function appRoutes(app: FastifyInstance) {
     // business routes
     app.post('/business', RegisterBusiness);
     app.get('/business', getBusiness);
+    app.put('/business',updateBusiness);
     // swot routes
     app.post('/swot',RegisterSwot);
     // business model routes

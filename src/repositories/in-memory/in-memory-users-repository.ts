@@ -55,8 +55,8 @@ export class InMemoryUsersRepository implements UsersRepository {
         const index = this.items.findIndex(item => item.id === updatedUser.id && item.email === updatedUser.email);
 
         if (index !== -1 ) {
-            this.items[index] = updatedUser;
-            return updatedUser;
+            this.items[index] = {...this.items[index], ...updatedUser};
+            return this.items[index];
         } else {
             throw new UserNotFoundError();
         }

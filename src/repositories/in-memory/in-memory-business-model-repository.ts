@@ -19,8 +19,8 @@ export class InMemoryBusinessModelRepository implements BusinessModelRepository{
             valueProposition: Array.isArray(valueProposition) ? valueProposition : []
 
         });
+        
 
         return this.businessModel[0];
     }
-
 }

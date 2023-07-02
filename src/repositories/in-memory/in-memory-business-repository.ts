@@ -1,7 +1,6 @@
 import { Prisma, Business, User } from "@prisma/client";
 import { BusinessRepository } from "../business-repository";
-import { InMemoryUsersRepository } from "./in-memory-users-repository";
-import { RegisterUseCase } from "../../use-cases/register";
+import { BusinessNotFoundError } from "../../use-cases/errors/business-not-found-error";
 
 interface ConnectInput {
     id: string;
@@ -69,6 +68,16 @@ export class InMemoryBusinessRepository implements BusinessRepository {
       
         return Promise.resolve(newBusiness);
       }
+      async update(id: string, data: Prisma.BusinessUpdateInput) {
+        const index = this.businesses.findIndex((business) => business.id === id);
       
-
+        if (index !== -1) {
+          const {name, phone, website} = data ;
+          this.businesses[index] = { ...this.businesses[index], id, name: name as string, phone: phone as string, website: website as string};
+      
+          return this.businesses[index];
+        } else {
+          throw new BusinessNotFoundError();
+        }
+      }
 }

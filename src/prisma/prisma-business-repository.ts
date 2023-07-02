@@ -17,5 +17,15 @@ export class PrismaBusinessRepository implements BusinessRepository {
         });
         return business;
     }
+    async update(id: string, data: Prisma.BusinessUpdateInput){
 
-}
+        const business = await prisma.business.update({
+            where: {
+                    id,
+                },
+            data
+        })
+
+        return business;
+        }
+    }
