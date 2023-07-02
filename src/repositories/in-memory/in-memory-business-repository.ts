@@ -21,13 +21,13 @@ interface ConnectInput {
 
 
 export class InMemoryBusinessRepository implements BusinessRepository {
+    public businesses: Business[] = [];
+
     async findById(id: string) {
       const business = this.businesses.find(business => business.id === id) || null;
 
       return business;
     }
-
-    public businesses: Business[] = [];
     
     async create(data: Prisma.BusinessCreateInput): Promise<Business> {
         
