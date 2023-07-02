@@ -6,8 +6,7 @@ export class InMemoryUsersRepository implements UsersRepository {
     
     public items: User[] = []; 
     
-    async findById(id: string){
-        
+    async findById(id: string){        
         const user = await this.items.find(item => item.id === id);
         
         if(!user) return null;
@@ -41,10 +40,10 @@ export class InMemoryUsersRepository implements UsersRepository {
     }
 
     async update(data: Prisma.UserUpdateInput) {
-        const { id, email, ...userData } = data;
+        const { email, ...userData } = data;
 
         const updatedUser: User = {
-            id: id as string,
+            id: 'user-1',
             email: email as string,
             name: userData.name as string,
             password_hash: userData.password_hash as string,
@@ -55,7 +54,7 @@ export class InMemoryUsersRepository implements UsersRepository {
 
         const index = this.items.findIndex(item => item.id === updatedUser.id && item.email === updatedUser.email);
 
-        if (index !== -1) {
+        if (index !== -1 ) {
             this.items[index] = updatedUser;
             return updatedUser;
         } else {

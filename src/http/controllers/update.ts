@@ -21,7 +21,11 @@ export async function update(request: FastifyRequest, reply: FastifyReply)  {
         const prismaUsersRepository = new PrismaUsersRepository(); 
         const updateUseCase = new UpdateUseCase(prismaUsersRepository);
 
-        await updateUseCase.execute({ name, email, password, phone, isAdmin, id})
+        const {user} = await updateUseCase.execute({ name, email, password, phone, isAdmin, id})
+
+        return {
+            user,
+        }
     }
     catch (err) {
             
