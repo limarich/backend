@@ -6,20 +6,22 @@ import { RegisterUseCase } from "./register";
 import { InMemorySwotRepository } from "../repositories/in-memory/in-memory-swot-repository";
 import { RegisterSwotUseCase } from "./registerSwot";
 import { BusinessNotFoundError } from "./errors/business-not-found-error";
+import { InMemoryActionPlanRepository } from "../repositories/in-memory/in-memory-action-plan-repository";
+import { RegisterActionPlanUseCase } from "./registerActionPlan";
 
 describe("Register Swot use case", () => {
   it("should be able to register", async () => {
     const businessRepository = new InMemoryBusinessRepository();
     const usersRepository = new InMemoryUsersRepository();
-    const swotRepository = new InMemorySwotRepository();
+    const actionPlanRepository = new InMemoryActionPlanRepository();
 
     const registerUseCase = new RegisterUseCase(usersRepository);
     const businessUseCase = new RegisterBusinessUseCase(
       businessRepository,
       usersRepository
     );
-    const registerSwotUseCase = new RegisterSwotUseCase(
-      swotRepository,
+    const registerActionPlanUseCase = new RegisterActionPlanUseCase(
+      actionPlanRepository,
       businessRepository
     );
 
@@ -39,33 +41,27 @@ describe("Register Swot use case", () => {
       website: "www.rich.com",
     });
 
-    const { swot } = await registerSwotUseCase.execute({
+    const { actionPlan } = await registerActionPlanUseCase.execute({
       businessId: business.id,
-      opportunities: [],
-      strengths: [],
-      threats: [],
-      weaknesses: ["test 1"],
+      items: [],
     });
 
-    expect(swot.id).toEqual(expect.any(String));
+    expect(actionPlan.id).toEqual(expect.any(String));
   });
 
   it("should not be able to register", async () => {
     const swotRepository = new InMemorySwotRepository();
     const businessRepository = new InMemoryBusinessRepository();
 
-    const registerSwotUseCase = new RegisterSwotUseCase(
+    const registerActionPlanUseCase = new RegisterSwotUseCase(
       swotRepository,
       businessRepository
     );
 
     try {
-      await registerSwotUseCase.execute({
-        businessId: "asdasd",
-        opportunities: [],
-        strengths: [],
-        threats: [],
-        weaknesses: ["test 1"],
+      await registerActionPlanUseCase.execute({
+        businessId: "asdas",
+        items: [],
       });
     } catch (error) {
       expect(error).toBeInstanceOf(BusinessNotFoundError);
