@@ -3,6 +3,7 @@ import {SwotRepository} from '../repositories/swot-repository';
 import { prisma } from '../lib/prisma';
 
 export class PrismaSwotRepository implements SwotRepository {
+   
     async findById(id: string) {
         const swot = await prisma.swot.findUnique({
             where: {
@@ -14,6 +15,18 @@ export class PrismaSwotRepository implements SwotRepository {
     async create(data: Prisma.SwotCreateInput){
         const swot = await prisma.swot.create({data});
 
+        return swot;
+    }
+
+    async update(id: string, data: Prisma.SwotUpdateInput){
+       
+        const swot = await prisma.swot.update({
+            data,
+            where: {
+                id,
+            }
+        })
+        
         return swot;
     }
 

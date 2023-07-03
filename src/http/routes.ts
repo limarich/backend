@@ -9,6 +9,7 @@ import { RegisterBusinessModel } from "./controllers/registerBusinessModel";
 import { getBusiness } from "./controllers/getBusiness";
 import { updateBusiness } from "./controllers/updateBusiness";
 import { removeBusiness } from "./controllers/removeBusiness";
+import { updateSwot } from "./controllers/updateSwot";
 
 export async function appRoutes(app: FastifyInstance) {
     // user routes
@@ -23,6 +24,7 @@ export async function appRoutes(app: FastifyInstance) {
     app.delete('/business', removeBusiness);
     // swot routes
     app.post('/swot',RegisterSwot);
+    app.put('/swot', updateSwot);
     // business model routes
     app.post('/business-model',RegisterBusinessModel);
 }
