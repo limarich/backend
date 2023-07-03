@@ -10,21 +10,23 @@ import { getBusiness } from "./controllers/getBusiness";
 import { updateBusiness } from "./controllers/updateBusiness";
 import { removeBusiness } from "./controllers/removeBusiness";
 import { updateSwot } from "./controllers/updateSwot";
+import { getSwot } from "./controllers/getSwot";
 
 export async function appRoutes(app: FastifyInstance) {
-    // user routes
-    app.post('/users', registerUser);
-    app.post('/sections', authenticate);
-    app.put('/user/update', update);
-    app.get('/user', getUser);
-    // business routes
-    app.post('/business', RegisterBusiness);
-    app.get('/business', getBusiness);
-    app.put('/business',updateBusiness);
-    app.delete('/business', removeBusiness);
-    // swot routes
-    app.post('/swot',RegisterSwot);
-    app.put('/swot', updateSwot);
-    // business model routes
-    app.post('/business-model',RegisterBusinessModel);
+  // user routes
+  app.post("/users", registerUser);
+  app.get("/user", getUser);
+  app.put("/user/update", update);
+  app.post("/sections", authenticate);
+  // business routes
+  app.post("/business", RegisterBusiness);
+  app.get("/business", getBusiness);
+  app.put("/business", updateBusiness);
+  app.delete("/business", removeBusiness);
+  // swot routes
+  app.post("/swot", RegisterSwot);
+  app.get("/swot", getSwot);
+  app.put("/swot", updateSwot);
+  // business model routes
+  app.post("/business-model", RegisterBusinessModel);
 }
