@@ -15,6 +15,7 @@ import { getBusinessModelByBusinessId } from "./controllers/getBusinessModelByBu
 import { getBusinessModel } from "./controllers/getBusinessModel";
 import { updateBusinessModel } from "./controllers/updateBusinessModel";
 import { RegisterActionPlan } from "./controllers/registerActionPlan";
+import { getActionPlan } from "./controllers/getActionPlan";
 
 export async function appRoutes(app: FastifyInstance) {
   // user routes
@@ -38,4 +39,5 @@ export async function appRoutes(app: FastifyInstance) {
   app.put("/business-model", updateBusinessModel);
   // action plan routes
   app.post("/action-plan", RegisterActionPlan);
+  app.get("/action-plan", getActionPlan);
 }
