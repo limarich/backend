@@ -25,4 +25,13 @@ export class PrismaBusinessModelRepository implements BusinessModelRepository {
     });
     return businessModel;
   }
+  async update(id: string, data: Prisma.BusinessModelUpdateInput) {
+    const businessModel = await prisma.businessModel.update({
+      data,
+      where: {
+        id,
+      },
+    });
+    return businessModel;
+  }
 }

@@ -1,5 +1,6 @@
 import { Prisma, BusinessModel } from "@prisma/client";
 import { BusinessModelRepository } from "../business-model-repository";
+import { BusinessModelNotFoundError } from "../../use-cases/errors/business-model-not-found-error";
 
 export class InMemoryBusinessModelRepository
   implements BusinessModelRepository
@@ -49,5 +50,37 @@ export class InMemoryBusinessModelRepository
       this.businessModel.find((businessModel) => businessModel.id === id) ||
       null
     );
+  }
+  async update(id: string, data: Prisma.BusinessModelUpdateInput) {
+    const index = this.businessModel.findIndex(
+      (businessModel) => businessModel.id === id
+    );
+    if (index === -1) {
+      throw new BusinessModelNotFoundError();
+    }
+    const {
+      channels,
+      costs,
+      customerRelationship,
+      customerSegments,
+      mainActivities,
+      mainPartnerships,
+      mainResources,
+      revenue,
+      valueProposition,
+    } = data;
+    this.businessModel[index] = {
+      ...this.businessModel[index],
+      channels: (channels as string[]) || [],
+      costs: (costs as string[]) || [],
+      customerRelationship: (customerRelationship as string[]) || [],
+      customerSegments: (customerSegments as string[]) || [],
+      mainActivities: (mainActivities as string[]) || [],
+      mainPartnerships: (mainPartnerships as string[]) || [],
+      mainResources: (mainResources as string[]) || [],
+      revenue: (revenue as string[]) || [],
+      valueProposition: (valueProposition as string[]) || [],
+    };
+    return this.businessModel[index];
   }
 }

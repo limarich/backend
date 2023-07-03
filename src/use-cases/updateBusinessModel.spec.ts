@@ -3,12 +3,13 @@ import { InMemoryBusinessRepository } from "../repositories/in-memory/in-memory-
 import { RegisterBusinessUseCase } from "./registerBusiness";
 import { InMemoryUsersRepository } from "../repositories/in-memory/in-memory-users-repository";
 import { RegisterUseCase } from "./register";
-import { BusinessNotFoundError } from "./errors/business-not-found-error";
 import { InMemoryBusinessModelRepository } from "../repositories/in-memory/in-memory-business-model-repository";
 import { RegisterBusinessModelUseCase } from "./registerBusinessModel";
+import { UpdateBusinessModelUseCase } from "./updateBusinessModel";
+import { BusinessModelNotFoundError } from "./errors/business-model-not-found-error";
 
-describe("Register Business Model Swot use case", () => {
-  it("should be able to register", async () => {
+describe("update Business Model Swot use case", () => {
+  it("should be able to update", async () => {
     const businessRepository = new InMemoryBusinessRepository();
     const usersRepository = new InMemoryUsersRepository();
     const businessModelRepository = new InMemoryBusinessModelRepository();
@@ -20,6 +21,9 @@ describe("Register Business Model Swot use case", () => {
     );
     const registerBusinessModelUseCase = new RegisterBusinessModelUseCase(
       businessRepository,
+      businessModelRepository
+    );
+    const updateBusinessModelUseCase = new UpdateBusinessModelUseCase(
       businessModelRepository
     );
 
@@ -52,21 +56,31 @@ describe("Register Business Model Swot use case", () => {
       revenue: ["teste"],
     });
 
-    expect(businessModel.id).toEqual(expect.any(String));
+    const response = await updateBusinessModelUseCase.execute({
+      id: businessModel.id,
+      mainPartnerships: ["teste"],
+      mainActivities: ["teste"],
+      mainResources: ["teste"],
+      valueProposition: [],
+      customerRelationship: [],
+      channels: ["teste"],
+      customerSegments: ["teste"],
+      costs: [],
+      revenue: ["teste"],
+    });
+
+    expect(response.businessModel.id).toEqual(expect.any(String));
   });
 
-  it("should not be able to register", async () => {
-    const businessRepository = new InMemoryBusinessRepository();
+  it("should not be able to update", async () => {
     const businessModelRepository = new InMemoryBusinessModelRepository();
-
-    const registerBusinessModelUseCase = new RegisterBusinessModelUseCase(
-      businessRepository,
+    const updateBusinessModelUseCase = new UpdateBusinessModelUseCase(
       businessModelRepository
     );
 
-    try {
-      await registerBusinessModelUseCase.execute({
-        businessId: "asdasd",
+    await expect(() => {
+      return updateBusinessModelUseCase.execute({
+        id: "asdasd",
         mainPartnerships: ["teste"],
         mainActivities: ["teste"],
         mainResources: ["teste"],
@@ -77,8 +91,6 @@ describe("Register Business Model Swot use case", () => {
         costs: [],
         revenue: ["teste"],
       });
-    } catch (error) {
-      expect(error).toBeInstanceOf(BusinessNotFoundError);
-    }
+    }).rejects.toBeInstanceOf(BusinessModelNotFoundError);
   });
 });

@@ -13,6 +13,7 @@ import { updateSwot } from "./controllers/updateSwot";
 import { getSwot } from "./controllers/getSwot";
 import { getBusinessModelByBusinessId } from "./controllers/getBusinessModelByBusinessId";
 import { getBusinessModel } from "./controllers/getBusinessModel";
+import { updateBusinessModel } from "./controllers/updateBusinessModel";
 
 export async function appRoutes(app: FastifyInstance) {
   // user routes
@@ -33,4 +34,5 @@ export async function appRoutes(app: FastifyInstance) {
   app.post("/business-model", RegisterBusinessModel);
   app.get("/business/business-model", getBusinessModelByBusinessId);
   app.get("/business-model", getBusinessModel);
+  app.put("/business-model", updateBusinessModel);
 }
