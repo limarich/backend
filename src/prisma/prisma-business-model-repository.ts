@@ -17,4 +17,12 @@ export class PrismaBusinessModelRepository implements BusinessModelRepository {
     });
     return businessModel;
   }
+  async findById(id: string) {
+    const businessModel = await prisma.businessModel.findUnique({
+      where: {
+        id,
+      },
+    });
+    return businessModel;
+  }
 }

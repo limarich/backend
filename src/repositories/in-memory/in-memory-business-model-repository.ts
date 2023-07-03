@@ -44,4 +44,10 @@ export class InMemoryBusinessModelRepository
       ) || null
     );
   }
+  async findById(id: string) {
+    return (
+      this.businessModel.find((businessModel) => businessModel.id === id) ||
+      null
+    );
+  }
 }
