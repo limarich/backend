@@ -8,6 +8,7 @@ import { RegisterSwot } from "./controllers/registerSwot";
 import { RegisterBusinessModel } from "./controllers/registerBusinessModel";
 import { getBusiness } from "./controllers/getBusiness";
 import { updateBusiness } from "./controllers/updateBusiness";
+import { removeBusiness } from "./controllers/removeBusiness";
 
 export async function appRoutes(app: FastifyInstance) {
     // user routes
@@ -19,6 +20,7 @@ export async function appRoutes(app: FastifyInstance) {
     app.post('/business', RegisterBusiness);
     app.get('/business', getBusiness);
     app.put('/business',updateBusiness);
+    app.delete('/business', removeBusiness);
     // swot routes
     app.post('/swot',RegisterSwot);
     // business model routes

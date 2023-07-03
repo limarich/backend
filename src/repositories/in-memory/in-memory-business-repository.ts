@@ -20,6 +20,7 @@ interface ConnectInput {
 
 
 export class InMemoryBusinessRepository implements BusinessRepository {
+  
     public businesses: Business[] = [];
 
     async findById(id: string) {
@@ -76,6 +77,17 @@ export class InMemoryBusinessRepository implements BusinessRepository {
           this.businesses[index] = { ...this.businesses[index], id, name: name as string, phone: phone as string, website: website as string};
       
           return this.businesses[index];
+        } else {
+          throw new BusinessNotFoundError();
+        }
+      }
+      async remove(id: string) {
+        const business = await this.findById(id);
+        
+        if (business) {
+          this.businesses = this.businesses.filter((business) => business.id !== id); 
+      
+          return;
         } else {
           throw new BusinessNotFoundError();
         }

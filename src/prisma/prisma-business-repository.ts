@@ -1,6 +1,7 @@
 import { Prisma, Business } from "@prisma/client";
 import { BusinessRepository } from "../repositories/business-repository";
 import { prisma } from "../lib/prisma";
+import { BusinessNotFoundError } from "../use-cases/errors/business-not-found-error";
 
 export class PrismaBusinessRepository implements BusinessRepository {
     async findById(id: string) {
@@ -28,4 +29,21 @@ export class PrismaBusinessRepository implements BusinessRepository {
 
         return business;
         }
-    }
+        async remove(id: string) {
+            // Remover registros relacionados na tabela swot
+            await prisma.swot.deleteMany({
+              where: {
+                businessId: id,
+              },
+            });
+          
+            // Remover o registro da tabela business
+            await prisma.business.delete({
+              where: {
+                id,
+              },
+            });
+            console.log('removido');
+            return;
+          }
+}
