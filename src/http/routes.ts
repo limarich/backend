@@ -16,28 +16,38 @@ import { getBusinessModel } from "./controllers/getBusinessModel";
 import { updateBusinessModel } from "./controllers/updateBusinessModel";
 import { RegisterActionPlan } from "./controllers/registerActionPlan";
 import { getActionPlan } from "./controllers/getActionPlan";
+import { checkToken } from "./middlewares/checkToken";
 
 export async function appRoutes(app: FastifyInstance) {
-  // user routes
-  app.post("/users", registerUser);
-  app.get("/user", getUser);
-  app.put("/user/update", update);
   app.post("/sections", authenticate);
+
+  // user routes
+  app.post("/users", { preHandler: [checkToken] }, registerUser);
+  app.get("/user", { preHandler: [checkToken] }, getUser);
+  app.put("/user/update", { preHandler: [checkToken] }, update);
   // business routes
-  app.post("/business", RegisterBusiness);
-  app.get("/business", getBusiness);
-  app.put("/business", updateBusiness);
-  app.delete("/business", removeBusiness);
+  app.post("/business", { preHandler: [checkToken] }, RegisterBusiness);
+  app.get("/business", { preHandler: [checkToken] }, getBusiness);
+  app.put("/business", { preHandler: [checkToken] }, updateBusiness);
+  app.delete("/business", { preHandler: [checkToken] }, removeBusiness);
   // swot routes
-  app.post("/swot", RegisterSwot);
-  app.get("/swot", getSwot);
-  app.put("/swot", updateSwot);
+  app.post("/swot", { preHandler: [checkToken] }, RegisterSwot);
+  app.get("/swot", { preHandler: [checkToken] }, getSwot);
+  app.put("/swot", { preHandler: [checkToken] }, updateSwot);
   // business model routes
-  app.post("/business-model", RegisterBusinessModel);
-  app.get("/business/business-model", getBusinessModelByBusinessId);
-  app.get("/business-model", getBusinessModel);
-  app.put("/business-model", updateBusinessModel);
+  app.post(
+    "/business-model",
+    { preHandler: [checkToken] },
+    RegisterBusinessModel
+  );
+  app.get(
+    "/business/business-model",
+    { preHandler: [checkToken] },
+    getBusinessModelByBusinessId
+  );
+  app.get("/business-model", { preHandler: [checkToken] }, getBusinessModel);
+  app.put("/business-model", { preHandler: [checkToken] }, updateBusinessModel);
   // action plan routes
-  app.post("/action-plan", RegisterActionPlan);
-  app.get("/action-plan", getActionPlan);
+  app.post("/action-plan", { preHandler: [checkToken] }, RegisterActionPlan);
+  app.get("/action-plan", { preHandler: [checkToken] }, getActionPlan);
 }
