@@ -24,6 +24,7 @@ export async function authenticate(
     const authenticateUseCase = new AuthenticateUseCase(prismaUsersRepository);
 
     const { user } = await authenticateUseCase.execute({ email, password });
+    const { id, isAdmin, password_hash, ...userWithoutId } = user;
 
     try {
       const secret = env.secret || "";
@@ -36,6 +37,7 @@ export async function authenticate(
       );
 
       return reply.code(200).send({
+        user: userWithoutId,
         token,
       });
     } catch (err) {

@@ -22,7 +22,11 @@ export async function appRoutes(app: FastifyInstance) {
   app.post("/sections", authenticate);
 
   // user routes
-  app.post("/users", { preHandler: [checkToken] }, registerUser);
+  app.post(
+    "/users",
+    // , { preHandler: [checkToken] }
+    registerUser
+  );
   app.get("/user", { preHandler: [checkToken] }, getUser);
   app.put("/user/update", { preHandler: [checkToken] }, update);
   // business routes
