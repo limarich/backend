@@ -8,10 +8,10 @@ import { GetBusinessUseCase } from "../../use-cases/getBusiness";
 
 export const getSwot = async (request: FastifyRequest, reply: FastifyReply) => {
   const getSwotBodySchema = z.object({
-    BusinessId: z.string(),
+    id: z.string(),
   });
 
-  const { BusinessId } = getSwotBodySchema.parse(request.query);
+  const { id } = getSwotBodySchema.parse(request.query);
 
   try {
     const swotRepository = new PrismaSwotRepository();
@@ -19,7 +19,7 @@ export const getSwot = async (request: FastifyRequest, reply: FastifyReply) => {
     const getBusinessUseCase = new GetBusinessUseCase(businessRepository);
     const getBusinessSwotUseCase = new GetSwotUseCase(swotRepository);
 
-    const { business } = await getBusinessUseCase.execute(BusinessId);
+    const { business } = await getBusinessUseCase.execute(id);
     console.log(business);
     const { swot } = await getBusinessSwotUseCase.execute(
       business.swot?.id || ""

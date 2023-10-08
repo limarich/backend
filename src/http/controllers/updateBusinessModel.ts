@@ -3,13 +3,15 @@ import { z } from "zod";
 import { UpdateBusinessModelUseCase } from "../../use-cases/updateBusinessModel";
 import { PrismaBusinessModelRepository } from "../../prisma/prisma-business-model-repository";
 import { BusinessModelNotFoundError } from "../../use-cases/errors/business-model-not-found-error";
+import { GetBusinessUseCase } from "../../use-cases/getBusiness";
+import { PrismaBusinessRepository } from "../../prisma/prisma-business-repository";
 
 export async function updateBusinessModel(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
   const updateBusinessModelBodySchema = z.object({
-    id: z.string(),
+    businessId: z.string(),
     mainPartnerships: z.array(z.string()).optional(),
     mainActivities: z.array(z.string()).optional(),
     mainResources: z.array(z.string()).optional(),
@@ -22,7 +24,7 @@ export async function updateBusinessModel(
   });
 
   const {
-    id,
+    businessId,
     channels,
     costs,
     customerRelationship,
@@ -39,9 +41,13 @@ export async function updateBusinessModel(
     const updateBusinessModelUseCase = new UpdateBusinessModelUseCase(
       prismaBusinessModelRepository
     );
+    const prismaBusinessRepository = new PrismaBusinessRepository();
+    const getBusinessUseCase = new GetBusinessUseCase(prismaBusinessRepository);
+
+    const { business } = await getBusinessUseCase.execute(businessId);
 
     const { businessModel } = await updateBusinessModelUseCase.execute({
-      id,
+      id: business.businessModel?.id || "",
       channels,
       costs,
       customerRelationship,

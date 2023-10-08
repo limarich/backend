@@ -93,7 +93,7 @@ model ActionItem {
   how     String
   howMuch String
 
-  actionPlanId String     @unique
+  actionPlanId String
   actionPlan   ActionPlan @relation(fields: [actionPlanId], references: [id])
 
   @@map("action_item")

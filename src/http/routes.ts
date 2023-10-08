@@ -17,6 +17,7 @@ import { updateBusinessModel } from "./controllers/updateBusinessModel";
 import { RegisterActionPlan } from "./controllers/registerActionPlan";
 import { getActionPlan } from "./controllers/getActionPlan";
 import { checkToken } from "./middlewares/checkToken";
+import { UpdateActionPlan } from "./controllers/updateActionPlan";
 
 export async function appRoutes(app: FastifyInstance) {
   app.post("/sections", authenticate);
@@ -54,4 +55,5 @@ export async function appRoutes(app: FastifyInstance) {
   // action plan routes
   app.post("/action-plan", { preHandler: [checkToken] }, RegisterActionPlan);
   app.get("/action-plan", { preHandler: [checkToken] }, getActionPlan);
+  app.put("/action-plan", { preHandler: [checkToken] }, UpdateActionPlan);
 }

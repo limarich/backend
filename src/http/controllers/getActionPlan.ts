@@ -3,6 +3,9 @@ import z from "zod";
 import { PrismaActionPlanRepository } from "../../prisma/prisma-action-plan-repository";
 import { GetActionPlanUseCase } from "../../use-cases/getActionPlan";
 import { ActionPlanNotFoundError } from "../../use-cases/errors/action-plan-not-found-error";
+import { getBusiness } from "./getBusiness";
+import { PrismaBusinessRepository } from "../../prisma/prisma-business-repository";
+import { GetBusinessUseCase } from "../../use-cases/getBusiness";
 
 export const getActionPlan = async (
   request: FastifyRequest,
@@ -18,7 +21,14 @@ export const getActionPlan = async (
     const actionPlanRepository = new PrismaActionPlanRepository();
     const getActionPlanUseCase = new GetActionPlanUseCase(actionPlanRepository);
 
-    const { actionPlan } = await getActionPlanUseCase.execute(id);
+    const businessRepository = new PrismaBusinessRepository();
+    const getBusinessUseCase = new GetBusinessUseCase(businessRepository);
+
+    const { business } = await getBusinessUseCase.execute(id);
+
+    const { actionPlan } = await getActionPlanUseCase.execute(
+      business.actionPlan?.id || ""
+    );
 
     return {
       actionPlan,
