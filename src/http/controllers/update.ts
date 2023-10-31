@@ -3,38 +3,52 @@ import { z } from "zod";
 import { PrismaUsersRepository } from "../../prisma/prisma-users-repository";
 import { UpdateUseCase } from "../../use-cases/update";
 import { UserNotFoundError } from "../../use-cases/errors/user-not-found-error";
+import { UserAlreadyExistsError } from "../../use-cases/errors/user-already-exists-error";
+import jwt, { JwtPayload } from "jsonwebtoken";
+import { env } from "process";
 
-export async function update(request: FastifyRequest, reply: FastifyReply)  {
+interface DecodedToken extends JwtPayload {
+  id: string;
+}
 
-    const updateBodySchema = z.object({
-        id: z.string(),
-        name: z.string(),
-        email: z.string().email(),
-        password: z.string().min(6),
-        phone: z.string().min(11),
-        isAdmin: z.boolean(),
-    })
+export async function update(request: FastifyRequest, reply: FastifyReply) {
+  const updateBodySchema = z.object({
+    name: z.string(),
+    email: z.string().email(),
+    password: z.string().min(6),
+    phone: z.string().min(11),
+  });
 
-    const { name, email, password, phone, isAdmin, id} = updateBodySchema.parse(request.body);
+  const { name, email, password, phone } = updateBodySchema.parse(request.body);
+  const reqHeader = request.headers["authorization"];
 
-    try {
-        const prismaUsersRepository = new PrismaUsersRepository(); 
-        const updateUseCase = new UpdateUseCase(prismaUsersRepository);
+  const token = (reqHeader && reqHeader.split(" ")[1]) || "";
+  const secret = env.secret || "";
+  const { id } = jwt.verify(token, secret) as DecodedToken;
 
-        const {user} = await updateUseCase.execute({ name, email, password, phone, isAdmin, id})
+  try {
+    const prismaUsersRepository = new PrismaUsersRepository();
+    const updateUseCase = new UpdateUseCase(prismaUsersRepository);
 
-        return {
-            user,
-        }
+    const { user } = await updateUseCase.execute({
+      id,
+      name,
+      email,
+      password,
+      phone,
+    });
+
+    return {
+      user,
+    };
+  } catch (err) {
+    if (err instanceof UserNotFoundError) {
+      return reply.code(404).send({ message: err.message });
     }
-    catch (err) {
-            
-        if( err instanceof UserNotFoundError) {
-            return reply.code(404).send({message: err.message});
-        }
+    if (err instanceof UserAlreadyExistsError) {
+      return reply.code(404).send({ message: err.message });
+    }
 
-        throw err;
-
-        }
-
+    throw err;
+  }
 }

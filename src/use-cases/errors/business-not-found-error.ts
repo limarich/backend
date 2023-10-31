@@ -1,5 +1,5 @@
 export class BusinessNotFoundError extends Error {
-    constructor() {
-        super('Business not found!');
-    }
+  constructor() {
+    super("Business not found!");
+  }
 }

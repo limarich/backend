@@ -18,9 +18,19 @@ import { RegisterActionPlan } from "./controllers/registerActionPlan";
 import { getActionPlan } from "./controllers/getActionPlan";
 import { checkToken } from "./middlewares/checkToken";
 import { UpdateActionPlan } from "./controllers/updateActionPlan";
+import { registerUserRequest } from "./controllers/registerUserRequest";
+import { getUserRequests } from "./controllers/getUserRequests";
+import { removeUserRequest } from "./controllers/removeUserRequest";
+import { registerUserByUserRequest } from "./controllers/registerUserByUserRequest";
 
 export async function appRoutes(app: FastifyInstance) {
   app.post("/sections", authenticate);
+
+  // user request routes
+  app.post("/user-request", registerUserRequest);
+  app.get("/user-request", getUserRequests);
+  app.delete("/user-request", removeUserRequest);
+  app.post("/user-request/new-user", registerUserByUserRequest);
 
   // user routes
   app.post(
@@ -57,3 +67,4 @@ export async function appRoutes(app: FastifyInstance) {
   app.get("/action-plan", { preHandler: [checkToken] }, getActionPlan);
   app.put("/action-plan", { preHandler: [checkToken] }, UpdateActionPlan);
 }
+// app.delete("/user-request", deleteUserRequest);
